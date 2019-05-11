@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+BREW_URL = "https://raw.githubusercontent.com/Homebrew/install/master/install"
+
+# Exit immediately if a command exits with a non-zero status.
+set -e
+
+# macOS only
+[[ ! "$(uname -s)" = "Darwin" ]] && echo "Sorry, macOS only!" && return 1
+
+# command checking
+function command_exists() {
+  command -v $1 > /dev/null 2>&1
+}
+
+# install Homebrew
+function install_homebrew() {
+  if ! command_exists brew; then
+    echo "Installing Homebrew"
+    /usr/bin/ruby -e "$(curl -fsSL ${BREW_URL)" > /dev/null 2>&1
+    if [[ $? != 0 ]]; then
+      echo " => unable to install Homebrew!"
+      return 1
+    fi
+  fi
+}
+
+# update & upgrade Homebrew
